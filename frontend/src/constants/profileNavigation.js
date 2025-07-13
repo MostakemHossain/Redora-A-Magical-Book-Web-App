@@ -3,4 +3,5 @@ export const profileNavigation = [
     { name: "Orders", href: "/orders" },
     { name: "Cart", href: "/cart" },
     { name: "Checkout", href: "/checkout" },
+    
   ];
