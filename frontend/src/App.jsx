@@ -1,10 +1,11 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
+import Navbar from './components/ui/Navbar'
 
 const App = () => {
   return (
     <div >
-      <h1>Mostakem</h1>
+      <Navbar/>
       <main className='min-h-screen max-w-7xl mx-auto px-4 py-6'>
       <Outlet/>
       </main>
