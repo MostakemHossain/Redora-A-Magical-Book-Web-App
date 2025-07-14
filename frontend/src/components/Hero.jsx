@@ -42,11 +42,11 @@ const Banner = () => {
               </div>
             </div>
 
-            <div className="relative rounded-xl overflow-hidden lg:h-[600px]">
+            <div className="relative rounded-xl lg:h-[700px] overflow-hidden">
               <img
                 src="/banner.jpg"
                 alt="Book Marketplace Banner"
-                className="object-cover w-full h-full md:pt-14 rounded-xl"
+                className="object-cover  h-full md:pt-14 rounded-xl"
               />
             </div>
           </div>
