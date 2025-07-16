@@ -75,7 +75,7 @@ export default function Login() {
 
           <div className="text-center">
             <span className="text-sm">Don’t have an account?</span>
-            <a href="#" className="text-yellow-600 font-medium ml-1 hover:underline">
+            <a href="/sign-up" className="text-yellow-600 font-medium ml-1 hover:underline">
               Sign up
             </a>
           </div>
