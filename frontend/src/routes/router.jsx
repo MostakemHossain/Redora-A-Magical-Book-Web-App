@@ -1,4 +1,5 @@
 import App from "@/App";
+import About from "@/components/About";
 import Home from "@/pages/home/Home";
 import Login from "@/pages/login";
 import SignUp from "@/pages/SignUp";
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/about",
+        element: <About />,
       },
     ],
   },
