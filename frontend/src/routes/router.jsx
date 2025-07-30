@@ -1,5 +1,6 @@
 import App from "@/App";
 import About from "@/components/About";
+import Books from "@/components/Books";
 import Home from "@/pages/home/Home";
 import Login from "@/pages/login";
 import SignUp from "@/pages/SignUp";
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+      },
+      {
+        path: "/books",
+        element: <Books />,
       },
     ],
   },
