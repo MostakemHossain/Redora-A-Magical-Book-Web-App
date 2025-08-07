@@ -1,6 +1,7 @@
 import App from "@/App";
 import About from "@/components/About";
 import Books from "@/components/Books";
+import NotFound from "@/components/Notfound";
 import PrivateRoute from "@/components/ProtectedRoute";
 import AdminDashboard from "@/pages/dashboard/admin-dashboard/admin-dashboard";
 import Analytics from "@/pages/dashboard/admin-dashboard/components/Analytics";
@@ -68,7 +69,8 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <div>404 - Page Not Found</div>,
+
+    element: <NotFound/>,
   },
 ]);
 
