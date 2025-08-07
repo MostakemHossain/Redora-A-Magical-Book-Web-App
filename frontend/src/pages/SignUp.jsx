@@ -3,6 +3,7 @@ import { SiGoogle } from "react-icons/si";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import SignUP from "../../public/login.png";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 export default function SignupPage() {
   const [username, setUserName] = useState("");
@@ -10,11 +11,12 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setErrorMessage(""); 
+    setErrorMessage("");
 
     const userData = { username, email, password };
 
@@ -24,19 +26,20 @@ export default function SignupPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
-    
 
       const data = await response.json();
 
       if (data?.success) {
         console.log(data.message);
         toast.success(data.message, {
-          className: "custom-toast"
+          className: "custom-toast",
         });
         localStorage.setItem("accessToken", data?.data?.accessToken);
+
         setUserName("");
         setEmail("");
         setPassword("");
+        navigate("/");
       } else {
         setErrorMessage(data.message || "Signup failed");
         toast.error(data.message || "Signup failed");
@@ -110,7 +113,8 @@ export default function SignupPage() {
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") setShowPassword((prev) => !prev);
+                  if (e.key === "Enter" || e.key === " ")
+                    setShowPassword((prev) => !prev);
                 }}
               >
                 {showPassword ? (
@@ -124,7 +128,9 @@ export default function SignupPage() {
 
           {/* Inline error message */}
           {errorMessage && (
-            <div className="text-red-600 text-sm font-medium mt-2">{errorMessage}</div>
+            <div className="text-red-600 text-sm font-medium mt-2">
+              {errorMessage}
+            </div>
           )}
 
           <button

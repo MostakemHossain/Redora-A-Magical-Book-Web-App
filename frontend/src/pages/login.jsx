@@ -2,13 +2,52 @@ import React, { useState } from "react";
 import { SiGoogle } from "react-icons/si";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import loginImg from "../../public/login.png";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("http://localhost:4000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem("accessToken", data.data.accessToken);
+
+        toast.success("Login successful", {
+          className: "custom-toast",
+        });
+
+        navigate("/");
+      } else {
+        setErrorMessage(data.message || "Login failed");
+        toast.error(data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrorMessage("Something went wrong");
+      toast.error("Something went wrong");
+    }
+  };
 
   return (
     <div className="min-h-screen flex">
-  
       <div className="w-full md:w-1/2 flex flex-col justify-center px-10 py-20">
         <h2 className="text-2xl font-bold text-yellow-500 mb-6">Readora</h2>
 
@@ -17,13 +56,16 @@ export default function Login() {
         </h1>
         <p className="text-gray-500 mt-2">Please enter your details</p>
 
-        <form className="mt-10 space-y-6">
+        <form className="mt-10 space-y-6" onSubmit={handleSubmit}>
           <div>
             <label className="text-sm font-medium">Email address</label>
             <input
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full mt-1 p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              required
             />
           </div>
 
@@ -33,7 +75,10 @@ export default function Login() {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 pr-10"
+                required
               />
               <div
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
@@ -47,6 +92,12 @@ export default function Login() {
               </div>
             </div>
           </div>
+
+          {errorMessage && (
+            <div className="text-red-600 text-sm font-medium">
+              {errorMessage}
+            </div>
+          )}
 
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center">
@@ -75,12 +126,16 @@ export default function Login() {
 
           <div className="text-center">
             <span className="text-sm">Don’t have an account?</span>
-            <a href="/sign-up" className="text-yellow-600 font-medium ml-1 hover:underline">
+            <a
+              href="/sign-up"
+              className="text-yellow-600 font-medium ml-1 hover:underline"
+            >
               Sign up
             </a>
           </div>
         </form>
       </div>
+
       <div className="hidden md:block w-1/2">
         <div className="h-full flex items-center justify-center">
           <img
