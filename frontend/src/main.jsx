@@ -5,10 +5,13 @@ import "./index.css"
 import App from './App.jsx'
 import { RouterProvider } from 'react-router-dom'
 import router from './routes/router.jsx'
+import { Toaster } from 'sonner'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <Toaster/>
     <RouterProvider router={router}>
+      
     <App />
     </RouterProvider>
   </StrictMode>,
