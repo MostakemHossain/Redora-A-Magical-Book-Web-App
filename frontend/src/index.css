@@ -151,3 +151,10 @@ body {
 .animate-spin-slow {
   animation: spin-slow 5s linear infinite;
 }
+
+
+.custom-toast {
+  background-color: black;
+  padding: 14px;
+  color: white;
+}
