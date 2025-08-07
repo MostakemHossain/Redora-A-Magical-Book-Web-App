@@ -10,18 +10,26 @@ import {
   FiBell,
   FiSearch,
 } from "react-icons/fi";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const sidebarLinks = [
   { to: "/admin", label: "Dashboard", icon: <FiHome />, end: true },
   { to: "/admin/users", label: "Users", icon: <FiUsers /> },
   { to: "/admin/analytics", label: "Analytics", icon: <FiBarChart2 /> },
   { to: "/admin/settings", label: "Settings", icon: <FiSettings /> },
-  { to: "/logout", label: "Logout", icon: <FiLogOut /> },
+  { to: "/logout", label: "Logout", icon: <FiLogOut />, isLogout: true },
 ];
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    toast.success("Logout successful");
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-slate-50 to-slate-100">
@@ -57,39 +65,52 @@ const AdminDashboard = () => {
         </div>
 
         <nav className="flex-1 p-6 space-y-2">
-          {sidebarLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              end={link.end}
-              onClick={() => setSidebarOpen(false)}
-              className={({ isActive }) =>
-                `group flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25"
-                    : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <span
-                    className={`text-lg transition-transform duration-200 ${
-                      isActive
-                        ? "text-white"
-                        : "text-slate-500 group-hover:text-slate-700"
-                    } group-hover:scale-110`}
-                  >
-                    {link.icon}
-                  </span>
-                  <span className="font-semibold">{link.label}</span>
-                  {isActive && (
-                    <div className="ml-auto w-2 h-2 bg-white rounded-full opacity-75" />
-                  )}
-                </>
-              )}
-            </NavLink>
-          ))}
+          {sidebarLinks.map((link) =>
+            link.isLogout ? (
+              <button
+                key={link.label}
+                onClick={handleLogout}
+                className="group flex w-full items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-all duration-200"
+              >
+                <span className="text-lg text-slate-500 group-hover:text-slate-700 group-hover:scale-110 transition-transform">
+                  {link.icon}
+                </span>
+                <span className="font-semibold">{link.label}</span>
+              </button>
+            ) : (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.end}
+                onClick={() => setSidebarOpen(false)}
+                className={({ isActive }) =>
+                  `group flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25"
+                      : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <span
+                      className={`text-lg transition-transform duration-200 ${
+                        isActive
+                          ? "text-white"
+                          : "text-slate-500 group-hover:text-slate-700"
+                      } group-hover:scale-110`}
+                    >
+                      {link.icon}
+                    </span>
+                    <span className="font-semibold">{link.label}</span>
+                    {isActive && (
+                      <div className="ml-auto w-2 h-2 bg-white rounded-full opacity-75" />
+                    )}
+                  </>
+                )}
+              </NavLink>
+            )
+          )}
         </nav>
 
         <div className="p-6 border-t border-slate-200">

@@ -1,9 +1,11 @@
 import App from "@/App";
 import About from "@/components/About";
 import Books from "@/components/Books";
+import PrivateRoute from "@/components/ProtectedRoute";
 import AdminDashboard from "@/pages/dashboard/admin-dashboard/admin-dashboard";
 import Analytics from "@/pages/dashboard/admin-dashboard/components/Analytics";
 import DashboardHomePage from "@/pages/dashboard/admin-dashboard/components/Dashboard-Home-page";
+import Logout from "@/pages/dashboard/admin-dashboard/components/Logout";
 import SettingsPage from "@/pages/dashboard/admin-dashboard/components/Setting";
 import UsersPage from "@/pages/dashboard/admin-dashboard/components/UsersPage";
 import Home from "@/pages/home/Home";
@@ -36,7 +38,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminDashboard />,
+    element: <PrivateRoute><AdminDashboard /></PrivateRoute>,
     children: [
       {
       
@@ -53,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "settings",
         element: <SettingsPage />,
+      },
+      {
+        path: "logout",
+        element: <Logout/>,
       },
     ],
   },
