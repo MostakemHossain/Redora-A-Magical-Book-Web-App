@@ -1,0 +1,13 @@
+import express from "express";
+import validateRequest from "../../middleware/validateRequest.js";
+import { BookValidations } from "./books.validation.js";
+import { BookController } from "./books.controllers.js";
+import auth from "../../middleware/auth.js";
+
+const router= express.Router();
+
+router.post("/create-book",validateRequest(BookValidations.createBookValidationSchema), auth('user'),BookController.createBook);
+
+
+const bookRoutes = router;
+export default bookRoutes;
