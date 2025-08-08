@@ -1,81 +1,106 @@
-import React, { useState } from 'react';
-
-const booksData = [
-  { id: 1, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', price: 9.99, cover: 'https://picsum.photos/id/1011/200/300' },
-  { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee', price: 12.5, cover: 'https://picsum.photos/id/1012/200/300' },
-  { id: 3, title: '1984', author: 'George Orwell', price: 8.99, cover: 'https://picsum.photos/id/1013/200/300' },
-  { id: 4, title: 'Pride and Prejudice', author: 'Jane Austen', price: 10.99, cover: 'https://picsum.photos/id/1014/200/300' },
-  { id: 5, title: 'Moby-Dick', author: 'Herman Melville', price: 11.49, cover: 'https://picsum.photos/id/1015/200/300' },
-  { id: 6, title: 'War and Peace', author: 'Leo Tolstoy', price: 13.99, cover: 'https://picsum.photos/id/1016/200/300' },
-  { id: 7, title: 'Hamlet', author: 'William Shakespeare', price: 6.75, cover: 'https://picsum.photos/id/1017/200/300' },
-  { id: 8, title: 'The Odyssey', author: 'Homer', price: 7.95, cover: 'https://picsum.photos/id/1018/200/300' },
-  { id: 9, title: 'Crime and Punishment', author: 'Fyodor Dostoevsky', price: 9.25, cover: 'https://picsum.photos/id/1019/200/300' },
-  { id: 10, title: 'The Catcher in the Rye', author: 'J.D. Salinger', price: 10.99, cover: 'https://picsum.photos/id/1020/200/300' },
-  { id: 11, title: 'Brave New World', author: 'Aldous Huxley', price: 8.99, cover: 'https://picsum.photos/id/1021/200/300' },
-  { id: 12, title: 'The Hobbit', author: 'J.R.R. Tolkien', price: 12.99, cover: 'https://picsum.photos/id/1022/200/300' },
-];
+import React, { useState, useEffect } from "react";
+import LoadingPage from "./LoadingPage";
+import { useNavigate } from "react-router-dom";
 
 const Books = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+  const [books, setBooks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [visibleCount, setVisibleCount] = useState(8);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const filteredBooks = booksData.filter(book =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    book.author.toLowerCase().includes(searchTerm.toLowerCase())
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("http://localhost:4000/books");
+        if (!res.ok) throw new Error("Failed to fetch books");
+        const data = await res.json();
+        setBooks(data.data || data);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBooks();
+  }, []);
+
+  const lowerSearch = searchTerm.toLowerCase();
+  const filteredBooks = books.filter(
+    (book) =>
+      book.title?.toLowerCase().includes(lowerSearch) ||
+      book.author?.toLowerCase().includes(lowerSearch)
   );
 
   const visibleBooks = filteredBooks.slice(0, visibleCount);
 
   const handleLoadMore = () => {
-    setVisibleCount(prev => prev + 6);
+    setVisibleCount((prev) => prev + 6);
   };
+
+
+  if (loading) return <LoadingPage />;
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen text-red-500 text-lg">
+        <p>⚠ {error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 md:px-12 py-10 bg-gray-50 min-h-screen">
+     
       <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
-        <h1 className="text-3xl font-bold text-center md:text-left">
-          All Books ({filteredBooks.length})
+        <h1 className="text-3xl font-bold text-gray-900">
+          All Books <span className="text-yellow-500">({filteredBooks.length})</span>
         </h1>
-        <div className="flex items-center gap-2 w-full md:w-auto">
-          <input
-            type="text"
-            placeholder="Search books..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          />
-          <button
-            className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition"
-            onClick={() => {}}
-          >
-            Search
-          </button>
-        </div>
+        <input
+          type="text"
+          placeholder="Search books..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+        />
       </div>
 
+     
       {visibleBooks.length === 0 ? (
-        <p className="text-center text-gray-500">No books found.</p>
+        <p className="text-center text-gray-500 py-10">No books found 📚</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-          {visibleBooks.map((book) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          {visibleBooks.map(({ _id, title, caption, image, rating, author, price }) => (
             <div
-              key={book.id}
-              className="bg-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition duration-300"
+              key={_id}
+              className="bg-white rounded-xl border border-gray-200 shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col overflow-hidden"
             >
-              <img
-                src={book.cover}
-                alt={book.title}
-                className="w-full h-60 object-cover"
-              />
-              <div className="p-4">
-                <h2 className="text-lg font-semibold text-gray-800">
-                  {book.title}
-                </h2>
-                <p className="text-sm text-gray-500">{book.author}</p>
-                <p className="text-md text-orange-500 font-semibold mt-1">
-                  ${book.price.toFixed(2)}
-                </p>
-                <button className="mt-4 w-full bg-yellow-500 text-black py-2 px-4 rounded hover:bg-yellow-600 transition">
+              <div className="h-56 w-full overflow-hidden">
+                <img
+                  src={image}
+                  alt={title}
+                  className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-6 flex flex-col flex-grow">
+                <h3 className="text-xl font-semibold mb-1 text-gray-900">{title}</h3>
+                <p className="text-sm text-gray-500 italic mb-3">By {author}</p>
+                <p className="text-gray-600 mb-4 flex-grow">{caption}</p>
+
+                <div className="flex justify-between items-center mb-4">
+                  <p className="text-green-700 font-semibold">${price?.toFixed(2) || "N/A"}</p>
+                  <p className="text-yellow-500 font-semibold text-lg select-none">
+                    ⭐ {rating ? rating.toFixed(1) : "N/A"}
+                  </p>
+                </div>
+
+                <button
+                 onClick={() => navigate(`/books/${_id}`)}
+                  className="mt-auto px-5 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out"
+                >
                   View Details
                 </button>
               </div>
@@ -84,6 +109,7 @@ const Books = () => {
         </div>
       )}
 
+     
       {visibleCount < filteredBooks.length && (
         <div className="mt-8 flex justify-center">
           <button

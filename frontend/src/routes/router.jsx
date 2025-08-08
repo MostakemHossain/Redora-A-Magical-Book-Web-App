@@ -1,9 +1,11 @@
 import App from "@/App";
 import About from "@/components/About";
+import BookDetails from "@/components/BookDetails";
 import Books from "@/components/Books";
 import NotFound from "@/components/Notfound";
 import PrivateRoute from "@/components/ProtectedRoute";
 import AdminDashboard from "@/pages/dashboard/admin-dashboard/admin-dashboard";
+import AddBooks from "@/pages/dashboard/admin-dashboard/components/Add-Books";
 import Analytics from "@/pages/dashboard/admin-dashboard/components/Analytics";
 import DashboardHomePage from "@/pages/dashboard/admin-dashboard/components/Dashboard-Home-page";
 import Logout from "@/pages/dashboard/admin-dashboard/components/Logout";
@@ -31,6 +33,10 @@ const router = createBrowserRouter([
         path: "/books",
         element: <Books />,
       },
+      {
+        path: "/books/:id",
+        element: <BookDetails />,
+      },
     ],
   },
   {
@@ -48,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "users",
         element: <UsersPage />,
+      },
+      {
+        path: "create-books",
+        element: <AddBooks/>,
       },
       {
         path: "analytics",
