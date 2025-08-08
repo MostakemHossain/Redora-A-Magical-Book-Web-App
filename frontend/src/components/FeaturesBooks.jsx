@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import LoadingPage from "./LoadingPage";
 
 const FeaturesBooks = () => {
@@ -26,14 +25,10 @@ const FeaturesBooks = () => {
     fetchBooks();
   }, []);
 
-  if (loading) return <LoadingPage/>
+  if (loading) return <LoadingPage />;
   if (error) return <div className="text-center py-10 text-red-500">{error}</div>;
 
   const visibleBooks = books.slice(0, 6);
-
-  const handleBuyNow = () => {
-    toast.success("Book Added To Cart");
-  };
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -69,15 +64,16 @@ const FeaturesBooks = () => {
 
               <div className="flex justify-between items-center mb-5">
                 <p className="text-yellow-500 font-semibold text-lg select-none">
-                  ⭐ {rating.toFixed(1)}
+                  ⭐ {rating?.toFixed(1) || "N/A"}
                 </p>
               </div>
 
+            
               <button
-                onClick={() => handleBuyNow({ _id, title, author })}
+                onClick={() => navigate(`/books/${_id}`)}
                 className="mt-auto px-5 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out"
               >
-                Buy Now
+                View Details
               </button>
             </div>
           </div>

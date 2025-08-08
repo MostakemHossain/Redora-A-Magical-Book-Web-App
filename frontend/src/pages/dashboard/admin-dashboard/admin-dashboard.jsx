@@ -9,6 +9,7 @@ import {
   FiX,
   FiBell,
   FiSearch,
+  FiBook,
 } from "react-icons/fi";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -16,6 +17,7 @@ import { toast } from "sonner";
 const sidebarLinks = [
   { to: "/admin", label: "Dashboard", icon: <FiHome />, end: true },
   { to: "/admin/users", label: "Users", icon: <FiUsers /> },
+  { to: "/admin/create-books", label: "Add Books", icon: <FiBook /> },
   { to: "/admin/analytics", label: "Analytics", icon: <FiBarChart2 /> },
   { to: "/admin/settings", label: "Settings", icon: <FiSettings /> },
   { to: "/logout", label: "Logout", icon: <FiLogOut />, isLogout: true },
