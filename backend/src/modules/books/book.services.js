@@ -7,8 +7,13 @@ const createBook= async (payload,userId)=>{
     return book;  
 
 };
+const getAllBooks= async ()=>{
+    const books= await Book.find();
+    return books;
+}
 
 export const BookServices = {
     createBook,
+    getAllBooks
 
 }

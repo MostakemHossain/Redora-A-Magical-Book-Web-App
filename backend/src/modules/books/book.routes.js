@@ -7,6 +7,7 @@ import auth from "../../middleware/auth.js";
 const router= express.Router();
 
 router.post("/create-book",validateRequest(BookValidations.createBookValidationSchema), auth('admin'),BookController.createBook);
+router.get("/", BookController.getAllBooks);
 
 
 const bookRoutes = router;
