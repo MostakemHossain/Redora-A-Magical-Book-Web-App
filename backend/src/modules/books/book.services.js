@@ -11,9 +11,14 @@ const getAllBooks= async ()=>{
     const books= await Book.find({}).sort({ createdAt: -1 });
     return books;
 }
+const getBookById = async (id) => {
+    const book = await Book.findById(id);
+    return book;
+  }
 
 export const BookServices = {
     createBook,
-    getAllBooks
+    getAllBooks,
+    getBookById
 
 }
