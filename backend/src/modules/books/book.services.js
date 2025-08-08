@@ -8,7 +8,7 @@ const createBook= async (payload,userId)=>{
 
 };
 const getAllBooks= async ()=>{
-    const books= await Book.find();
+    const books= await Book.find({}).sort({ createdAt: -1 });
     return books;
 }
 
