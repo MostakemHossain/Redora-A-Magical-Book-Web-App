@@ -12,7 +12,7 @@ const Banner = () => {
                 Your Book Marketplace
               </span>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight">
                 Buy and sell books <br />
                 <span className="bg-gradient-to-r from-yellow-400 to-teal-500 text-transparent bg-clip-text">
                   anytime, anywhere
